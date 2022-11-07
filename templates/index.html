@@ -1,8 +1,11 @@
 <html>
-    {% include 'head.j2' %}
+{% include 'head.j2' %}
     <body>
-    {% include 'nav.j2' %}
+        <div class="container">
+{% include 'nav.j2' %}
 
+    <div class="row">
+    <div class="col">
     <form method="post" action="/migrate">
     <table class="table">
         <thead>
@@ -40,7 +43,9 @@
     {% endfor %}
         </tbody>
     </table>
-        <input class="button" type="submit" name="migrate" value="Create Migration Request" />
+        <input class="btn btn-primary" type="submit" name="migrate" value="Create Migration Request" />
     </form>
+</div>
+</div></div>
     </body>
 </html>
