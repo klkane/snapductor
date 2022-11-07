@@ -1,0 +1,4 @@
+list_assets_api_url: https://
+list_assets_api_bearer: abc123
+migrate_snap_api_url: https://
+migrate_snap_api_bearer: abc123
