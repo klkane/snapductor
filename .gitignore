@@ -1,2 +1,5 @@
 *.pyc
 __pycache*
+config.yml
+prod_assets.json
+test_assets.json

@@ -2,5 +2,45 @@
     {% include 'head.j2' %}
     <body>
     {% include 'nav.j2' %}
+
+    <form method="post" action="/migrate">
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">Path</th>
+                <th scope="col">Asset</th>
+                <th scope="col">Type</th>
+                <th scope="col">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+    {% set vars = { 'path': '' } %}
+    {% for asset in sl.test_assets %}
+        {% if vars.path != asset['original']['original']['path'] %}
+        <tr>
+            <td></td>
+            <td>{{ asset['original']['original']['path'] }}</td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {% endif %}
+        {% if vars.update( {'path': asset['original']['original']['path'] } ) %} {% endif %}
+        {% set status = sl.getStatus( asset['path'] ) %}
+        {% if status != '' %}
+        <tr>
+            <td></td>
+            <td></td>
+            <td><input type="checkbox" value="{{ asset['path'] }}" name="migrate_{{ asset['name'] }}" /> {{ asset['name'] }}</td>
+            <td>{{ asset['original']['asset_type'] }}</td>
+            <td>{{ status }}</td>
+        </tr>
+        {% endif %}
+    {% endfor %}
+        </tbody>
+    </table>
+        <input class="button" type="submit" name="migrate" value="Create Migration Request" />
+    </form>
     </body>
 </html>
