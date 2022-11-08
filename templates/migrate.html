@@ -8,7 +8,7 @@
 {% for row in requests %}
                     <div class="card">
                         <div class="card-header">
-                            <a href="/migrate/{{ row['request_id'] }}">#{{ row['request_id'] }}</a> by {{ row['username'] }} at {{ row['created_on'] }}
+                            <a href="/migrate/{{ row['request_id'] }}">Migratio Request #{{ row['request_id'] }}</a> by {{ row['username'] }} at {{ row['created_on'] }}
                         </div>
                         <div class="card-body">
                                 <p><strong>Payload:</strong> {{ row['objects'] }}</p>

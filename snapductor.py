@@ -19,25 +19,59 @@ def index():
     sl = snaplogic.SnapLogic()
     return render_template( 'index.html', user=user, sl=sl )
 
+@app.route("/cleanup")
+def cleanup():
+    user = None
+    sl = snaplogic.SnapLogic()
+    return render_template( 'cleanup.html', user=user, sl=sl )
+
 @app.route("/history")
 def history():
     user = None
     sl = snaplogic.SnapLogic()
-    return render_template( 'history.html', user=user, sl=sl )
-
-@app.route("/profile")
-def profile():
-    user = None
-    sl = snaplogic.SnapLogic()
-    return render_template( 'profile.html', user=user, sl=sl )
+    conn = get_db_connection()
+    
+    requests = conn.execute( "SELECT * FROM migrate_requests WHERE status = 'complete' ORDER BY created_on DESC" ).fetchall()
+    return render_template( 'history.html', user=user, sl=sl, requests=requests )
 
 @app.route("/refresh")
 def refresh():
     user = None
     sl = snaplogic.SnapLogic()
     sl.refresh_assets()
-    return render_template( 'index.html', user=user, sl=sl )
+    return redirect(url_for('index'))
 
+@app.route("/migrate/complete/<request_id>" )
+def migrate_complete( request_id ):
+    user = None
+    sl = snaplogic.SnapLogic()
+    conn = get_db_connection()
+    
+    requests = conn.execute( "SELECT * FROM migrate_requests WHERE request_id = ?", [ request_id ] ).fetchall()
+    comments = conn.execute( "SELECT * FROM comments WHERE request_id = ?", [ request_id ] ).fetchall()
+    
+    objects = None
+    for row in requests:
+        objects = row['objects'].split( ';' )
+
+    to_objects = []
+    from_objects = []
+    asset_types = []
+    for obj in objects:
+        inner = obj.split( ':' )
+        asset_types.append( inner[0] )
+        to_objects.append( inner[1].replace( sl.config['test_target'], sl.config['prod_target'] ) )
+        from_objects.append( inner[1] )
+    
+    for i in range( len( objects ) ):
+        sl.migrate_asset( asset_types[i], from_objects[i], to_objects[i] )
+    
+    conn.execute( "UPDATE migrate_requests SET status = 'complete' WHERE request_id = ?", [ request_id ] )
+    conn.commit()
+
+    conn.close()
+    return render_template( 'migrate_complete.html', user=user, sl=sl, requests=requests, comments=comments )
+    
 @app.route("/migrate/delete/<request_id>" )
 def migrate_delete( request_id ):
     user = None
