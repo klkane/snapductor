@@ -19,10 +19,19 @@ def index():
     sl = snaplogic.SnapLogic()
     return render_template( 'index.html', user=user, sl=sl )
 
-@app.route("/cleanup")
+@app.route( "/cleanup",  methods = ['POST', 'GET'] )
 def cleanup():
     user = None
     sl = snaplogic.SnapLogic()
+    
+    if flask.request.method == 'POST':
+        for key in flask.request.form.keys():
+            if key.startswith( "delete_" ):
+                action = flask.request.form[key].split( ":" )
+                sl.delete_asset( action[0], action[1] )
+    
+        sl.refresh_assets()
+
     return render_template( 'cleanup.html', user=user, sl=sl )
 
 @app.route("/history")

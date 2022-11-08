@@ -114,6 +114,11 @@ class SnapLogic:
 
         return ""
 
+    def delete_asset( self, asset_type, asset_path ):
+        headers = {"Authorization": "Bearer " + self.config['delete_asset_api_bearer']}
+        params = { "asset_type": asset_type, "asset_path": asset_path }
+        result = requests.get(self.config['delete_asset_api_url'], params=params, headers=headers)
+
     def migrate_asset( self, asset_type, migrate_from, migrate_to ):
         headers = {"Authorization": "Bearer " + self.config['migrate_asset_api_bearer']}
         params = { "asset_type": asset_type, "migrate_from": migrate_from, "migrate_to": migrate_to }

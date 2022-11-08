@@ -28,7 +28,7 @@
             <td>{{ asset['path'] }}</td>
             <td></td>
             <td>Project</td>
-            <td>{% if project_status == false %}<input type="checkbox" value="project:{{ asset['path'] }}" name="migrate_{{ asset['path'] }}" /> {% endif %}</td>
+            <td>{% if project_status == false %}<input type="checkbox" value="project:{{ asset['path'] }}" name="delete_{{ asset['path'] }}" /> {% endif %}</td>
         </tr>
         {% if project_status != 'NEW' %}
             {% for pipe in asset['pipelines'] %}
@@ -40,7 +40,7 @@
             <td></td>
             <td>{{ pipe['name'] }}</td>
             <td>Pipeline</td>
-            <td><input type="checkbox" value="pipeline:{{ pipe['path'] }}" name="migrate_{{ pipe['path'] }}" /></td>
+            <td><input type="checkbox" value="pipeline:{{ pipe['path'] }}" name="delete_{{ pipe['path'] }}" /></td>
         </tr>
                 {% endif %}
             {% endfor %}
@@ -52,7 +52,7 @@
             <td></td>
             <td>{{ task['job_name'] }}</td>
             <td>Job</td>
-            <td><input type="checkbox" value="task:{{ task['path'] }}" name="migrate_{{ task['path'] }}" /></td>
+            <td><input type="checkbox" value="task:{{ task['path'] }}" name="delete_{{ task['path'] }}" /></td>
         </tr>
             {% endif %}
             {% endfor %}
