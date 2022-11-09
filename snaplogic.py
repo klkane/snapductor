@@ -1,6 +1,7 @@
 import yaml
 import json
 import requests
+import sqlite3
 
 class SnapductorUser:
     username = None
@@ -25,6 +26,11 @@ class SnapLogic:
         with open( 'config.yml' ) as f:
             self.config = yaml.load( f, Loader=yaml.FullLoader )
         self.load_assets()
+
+    def get_db_connection( self ):
+        conn = sqlite3.connect( 'db/database.db' )
+        conn.row_factory = sqlite3.Row
+        return conn
 
     def comparePaths( self, path1, path2 ):
         path1 = path1.replace( self.config['test_target'], '' )

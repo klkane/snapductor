@@ -6,18 +6,16 @@ import sqlite3
 import snaplogic
 import os
 
-login_manager = LoginManager()
+from lib.migrate import migrate_pages
 
 app = Flask( __name__ )
+app.register_blueprint( migrate_pages )
+
 sl = snaplogic.SnapLogic()
 app.secret_key = bytes( sl.config['secret_key'], 'utf-8' )
 
+login_manager = LoginManager()
 login_manager.init_app( app )
-
-def get_db_connection():
-    conn = sqlite3.connect( 'db/database.db' )
-    conn.row_factory = sqlite3.Row
-    return conn
 
 @login_manager.user_loader
 def load_user( user_id ):
@@ -143,21 +141,3 @@ def migrate_detail( request_id ):
     sl = snaplogic.SnapLogic()
     return render_template( 'migrate_detail.html', sl=sl, requests=requests, comments=comments )
  
-@app.route( "/migrate",  methods = [ 'POST', 'GET' ] )
-@login_required
-def migrate():
-    conn = get_db_connection()
-    if flask.request.method == 'POST':
-        objects = []
-        for key in flask.request.form.keys():
-            if key.startswith( "migrate_" ):
-                objects.append( flask.request.form[key] )
-    
-        inp = [ 'kkane', ';'.join( objects ) ]
-        conn.execute( "INSERT INTO migrate_requests ( username, objects ) VALUES( ?, ? );", inp )
-        conn.commit()
-    requests = conn.execute('SELECT * FROM migrate_requests WHERE status != "complete"').fetchall()
-    conn.close()
-    sl = snaplogic.SnapLogic()
-    return render_template( 'migrate.html', sl=sl, requests=requests )
-
