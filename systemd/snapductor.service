@@ -1,0 +1,10 @@
+[Unit]
+Description=Gunicorn instance to serve snapductor
+After=network.target
+
+[Service]
+WorkingDirectory=/home/snapuser/snapductor
+ExecStart=/usr/bin/gunicorn --workers 2 --bind 0.0.0.0:7070 wsgi:app
+
+[Install]
+WantedBy=multi-user.target

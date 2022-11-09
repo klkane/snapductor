@@ -1,3 +1,4 @@
+secret_key: abc123
 test_target: test
 prod_target: prod
 list_assets_api_url: https://

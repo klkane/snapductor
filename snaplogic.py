@@ -2,6 +2,18 @@ import yaml
 import json
 import requests
 
+class SnapductorUser:
+    username = None
+    is_authenticated = True
+    is_active = True
+    is_anonymous = False
+
+    def get_id( self ):
+        return self.username
+
+    def __init__( self, username ):
+        self.username = username
+
 class SnapLogic:
     config = None
     test_assets = None
