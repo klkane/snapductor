@@ -11,32 +11,7 @@
                             <a href="/migrate/{{ row['request_id'] }}">Migration Request #{{ row['request_id'] }}</a> by {{ row['username'] }} at {{ row['created_on'] }}
                         </div>
                         <div class="card-body">
-                                <p><strong>Payload:</strong> {{ row['objects'] }}</p>
-                                <p>
-                                    {% if row['status'] != 'complete' %}
-                                    <a class="btn btn-primary" href="/migrate/complete/{{ row['request_id'] }}">Complete Migration</a>
-                                    <a class="btn btn-secondary" href="/migrate/delete/{{ row['request_id'] }}">Delete Request</a>
-                                    {% endif %}
-                                </p>
-                                <div class="card">
-                                    <div class="card-header">
-                                        Comments
-                                    </div>
-                                    <div class="card-body">
-{% for comm in comments %}
-                                        <p><strong>{{ comm['username'] }} ({{ comm['created_on'] }}):</strong> {{ comm['comment'] }}</p>
-{% endfor %}
-                                    {% if row['status'] != 'complete' %}
-                                        <form method="post">
-                                            <div class="form-group">
-                                                <label for="addComment">New Comment</label>
-                                                <textarea class="form-control" id="addComment" rows="3" name="addComment"></textarea>
-                                            </div>
-                                            <input type="submit" name="comment" value="Add Comment" class="btn btn-primary" />
-                                        </form>
-                                    {% endif %}
-                                    </div>
-                                </div>
+{% include 'migrate_record.j2' %}
                                     
                         </div>
                     </div><br />

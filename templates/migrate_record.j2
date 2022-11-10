@@ -1,0 +1,29 @@
+
+                                <p><strong>Payload:</strong> {{ row['objects'] }}</p>
+                                <p>
+                                    {% if row['status'] != 'complete' and not migrate_record_summary %}
+                                    <a class="btn btn-primary" href="/migrate/complete/{{ row['request_id'] }}">Complete Migration</a>
+                                    <a class="btn btn-secondary" href="/migrate/delete/{{ row['request_id'] }}">Delete Request</a>
+                                    {% endif %}
+                                </p>
+{% if comments|length > 0 or ( row['status'] != complete and not migrate_record_summary ) %}
+                                <div class="card">
+                                    <div class="card-header">
+                                        Comments
+                                    </div>
+                                    <div class="card-body">
+{% for comm in comments %}
+                                        <p><strong>{{ comm['username'] }} ({{ comm['created_on'] }}):</strong> {{ comm['comment'] }}</p>
+{% endfor %}
+                                    {% if row['status'] != 'complete' and not migrate_record_summary %}
+                                        <form method="post">
+                                            <div class="form-group">
+                                                <label for="addComment">New Comment</label>
+                                                <textarea class="form-control" id="addComment" rows="3" name="addComment"></textarea>
+                                            </div>
+                                            <input type="submit" name="comment" value="Add Comment" class="btn btn-primary" />
+                                        </form>
+                                    {% endif %}
+                                    </div>
+                                </div>
+{% endif %}

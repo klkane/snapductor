@@ -11,7 +11,7 @@
                             <a href="/migrate/{{ row['request_id'] }}">Migration Request #{{ row['request_id'] }}</a> by {{ row['username'] }} at {{ row['created_on'] }}
                         </div>
                         <div class="card-body">
-                                <p><strong>Payload:</strong> {{ row['objects'] }}</p>
+{% include 'migrate_record.j2' %}
                         </div>
                     </div><br />
 {% endfor %}

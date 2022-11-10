@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request
-from flask_login import login_required
+from flask_login import login_required, current_user
 import snaplogic
 
 migrate_pages = Blueprint( 'migrate_pages', __name__, template_folder='../templates' )
@@ -15,7 +15,7 @@ def migrate():
             if key.startswith( "migrate_" ):
                 objects.append( request.form[key] )
     
-        inp = [ 'kkane', ';'.join( objects ) ]
+        inp = [ current_user.username, ';'.join( objects ) ]
         conn.execute( "INSERT INTO migrate_requests ( username, objects ) VALUES( ?, ? );", inp )
         conn.commit()
     requests = conn.execute('SELECT * FROM migrate_requests WHERE status != "complete"').fetchall()
@@ -47,7 +47,7 @@ def migrate_complete( request_id ):
     for i in range( len( objects ) ):
         sl.migrate_asset( asset_types[i], from_objects[i], to_objects[i] )
     
-    conn.execute( "UPDATE migrate_requests SET status = 'complete' WHERE request_id = ?", [ request_id ] )
+    conn.execute( "UPDATE migrate_requests SET status = 'complete', completed_on = CURRENT_TIMESTAMP, completed_by = ? WHERE request_id = ?", [ current_user.username, request_id ] )
     conn.commit()
 
     conn.close()

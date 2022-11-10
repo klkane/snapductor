@@ -5,15 +5,29 @@ import sqlite3
 
 class SnapductorUser:
     username = None
-    is_authenticated = True
-    is_active = True
+    is_admin = False
+
+    # required interface for flask-login
+    is_authenticated = False
+    is_active = False
     is_anonymous = False
 
     def get_id( self ):
         return self.username
+    # end required interface for flask-login
 
-    def __init__( self, username ):
+    def __init__( self, username, sl ):
         self.username = username
+        conn = sl.get_db_connection()
+        requests = conn.execute( "SELECT * FROM users WHERE username = ?", [ username ] ).fetchall()
+        for row in requests:
+            self.is_authenticated = True
+            self.is_active = True
+            if row['user_role'] == 'Admin':
+                self.is_admin = True
+
+    def getName( self, sl ):
+        return self.username
 
 class SnapLogic:
     config = None
@@ -28,7 +42,7 @@ class SnapLogic:
         self.load_assets()
 
     def get_db_connection( self ):
-        conn = sqlite3.connect( 'db/database.db' )
+        conn = sqlite3.connect( 'var/snapductor_database.db' )
         conn.row_factory = sqlite3.Row
         return conn
 

@@ -1,17 +1,35 @@
             <header class="p-3 mb-3 border-bottom">
-                <div class="container">
+                    <div class="container">
+
                     <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                            <a class="navbar-brand" href="https://github.com/klkane/snapductor">
+                                <img src="/static/logo.svg" alt="Snapductor" width="30" height="24">
+                                Snapductor
+                            </a>
                         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-dark text-decoration-none">
                             <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
                         </a>
 
                         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-                            <li><a href="/" class="nav-link px-2 link-dark">View Test Assets</a></li>
-                            <li><a href="/migrate" class="nav-link px-2 link-dark">Migration Requests</a></li>
-                            <li><a href="/cleanup" class="nav-link px-2 link-dark">Production Cleanup</a></li>
-                            <li><a href="/refresh" class="nav-link px-2 link-dark">Refresh Metadata</a></li>
-                            <li><a href="/history" class="nav-link px-2 link-dark">History</a></li>
+                            <li><a href="/" class="nav-link px-2 link-dark active">View Test Assets</a></li>
+                            <li><a href="/migrate" class="nav-link link-dark px-2">Migration Requests</a></li>
+                            <li><a href="/cleanup" class="nav-link link-dark px-2">Production Cleanup</a></li>
+                            <li><a href="/refresh" class="nav-link link-dark px-2">Refresh Metadata</a></li>
+                            <li><a href="/history" class="nav-link link-dark px-2">History</a></li>
                         </ul>
+
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                {{ current_user.getName( sl ) }}
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">Action</a></li>
+                                <li><a class="dropdown-item" href="#">Another action</a></li>
+                                <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </header>

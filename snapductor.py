@@ -19,7 +19,8 @@ login_manager.init_app( app )
 
 @login_manager.user_loader
 def load_user( user_id ):
-    return snaplogic.SnapductorUser( user_id )
+    sl = snaplogic.SnapLogic()
+    return snaplogic.SnapductorUser( user_id, sl )
 
 @login_manager.unauthorized_handler
 def unauthorized_callback():
@@ -33,6 +34,7 @@ def logout():
 
 @app.route( '/login' )
 def login():
+    sl = snaplogic.SnapLogic()
     username = None
     if 'SNAPDUCTOR_DEBUG' in os.environ and os.environ['SNAPDUCTOR_DEBUG']:
         if 'SNAPDUCTOR_USER' in os.environ:
@@ -42,7 +44,7 @@ def login():
         username = flask.request.headers.get('your-header-name')
 
     if username is not None:
-        login_user( snaplogic.SnapductorUser( username ) )
+        login_user( snaplogic.SnapductorUser( username, sl ) )
         return redirect( url_for( 'index' ) )
     
     return render_template( 'login.html' )
@@ -72,7 +74,7 @@ def cleanup():
 @login_required
 def history():
     sl = snaplogic.SnapLogic()
-    conn = get_db_connection()
+    conn = sl.get_db_connection()
     
     requests = conn.execute( "SELECT * FROM migrate_requests WHERE status = 'complete' ORDER BY created_on DESC" ).fetchall()
     return render_template( 'history.html', sl=sl, requests=requests )
