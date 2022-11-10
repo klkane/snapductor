@@ -23,7 +23,7 @@ def load_user( user_id ):
 
 @login_manager.unauthorized_handler
 def unauthorized_callback():
-    return redirect( '/login?next=' + request.path )
+    return redirect( '/login' )
 
 @app.route( "/logout" )
 @login_required
